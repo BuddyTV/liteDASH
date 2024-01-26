@@ -9,6 +9,7 @@
 #define DASH_CONTENTPROTECTION_H_
 
 #include "descriptor.h"
+#include "cenc_pssh.h"
 
 #include <string>
 
@@ -21,11 +22,13 @@ class ContentProtection: public Descriptor {
     const std::string& GetRobustness() const;
     const std::string& GetRefId() const;
     const std::string& GetRef() const;
+    const CencPssh *GetPssh() const;
 
   private:
     std::string robustness_;
     std::string ref_id_;
     std::string ref_;
+    CencPssh *cenc_pssh_;
 
     friend class ContentProtectionElementParser;
 };

@@ -12,6 +12,8 @@
 #include "baseurl.h"
 #include "contentcomponent_element_parser.h"
 #include "contentcomponent.h"
+#include "contentprotection_element_parser.h"
+#include "contentprotection.h"
 #include "descriptor_element_parser.h"
 #include "descriptor.h"
 #include "representation_element_parser.h"
@@ -104,6 +106,9 @@ void AdaptationSetElementParser::AttachChildElementToParent(ElementBase *parent,
   } else if (child_name == "ContentComponent") {
     as_elem->content_component_.push_back(
         static_cast<ContentComponent*>(child));
+  } else if (child_name == "ContentProtection") {
+    as_elem->content_protections_.push_back(
+        static_cast<ContentProtection*>(child));
   } else if (child_name == "SegmentBase") {
     as_elem->segment_base_ = static_cast<SegmentBase*>(child);
   } else if (child_name == "SegmentList") {
@@ -132,6 +137,8 @@ ElementBaseParser* AdaptationSetElementParser::CreateChildParser(
     parser = std::make_unique < BaseURLElementParser > (name, parent);
   } else if (name == "ContentComponent") {
     parser = std::make_unique < ContentComponentElementParser > (name, parent);
+  } else if (name == "ContentProtection") {
+    parser = std::make_unique < ContentProtectionElementParser > (name, parent);
   } else if (name == "SegmentBase") {
     parser = std::make_unique < SegmentBaseElementParser > (name, parent);
   } else if (name == "SegmentList") {

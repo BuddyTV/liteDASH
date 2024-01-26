@@ -5,29 +5,28 @@
  * in the LICENSE file.
  *******************************************************************************/
 
-#ifndef DASH_CONTENTPROTECTION_ELEMENT_PARSER_H_
-#define DASH_CONTENTPROTECTION_ELEMENT_PARSER_H_
+#ifndef DASH_CENC_PSSH_ELEMENT_PARSER_H_
+#define DASH_CENC_PSSH_ELEMENT_PARSER_H_
 
-#include "descriptor_element_parser.h"
+#include "elementbase_parser.h"
 
 namespace dash {
 namespace mpd {
 
-class ContentProtectionElementParser: public DescriptorElementParser {
-    using DescriptorElementParser::DescriptorElementParser;
+class CencPsshElementParser: public ElementBaseParser {
+    using ElementBaseParser::ElementBaseParser;
 
   public:
     bool ParseStart(const std::string &element_name, ElementBase *elem_out,
         const char **attrib) override;
+    bool ParseEnd(const std::string &element_name, ElementBase *elem_out,
+                        const GetExternalAttributes &get_attribs) override;
+    bool ParseTextData(ElementBase *elem_out, const std::string sub_element,
+        const char *content, int length) override;
     ElementBase* CreateElement(const std::string &element) const override;
-    void AttachChildElementToParent(ElementBase *parent, ElementBase *child)
-        override;
-    ElementBaseParser* CreateChildParser(const std::string &name,
-        ElementBaseParser *parent) override;
-
 };
 
 } // namespace mpd
 } // namespace dash
 
-#endif /* DASH_CONTENTPROTECTION_ELEMENT_PARSER_H_ */
+#endif /* DASH_CENC_PSSH_ELEMENT_PARSER_H_ */

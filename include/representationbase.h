@@ -96,6 +96,7 @@ class RepresentationBase: public ElementBase {
     std::string tag_;
 
     friend class RepresentationBaseElementParser;
+    friend class AdaptationSetElementParser;
 };
 
 } // namespace mpd

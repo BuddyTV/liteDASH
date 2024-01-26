@@ -26,5 +26,9 @@ const std::string& ContentProtection::GetRef() const {
   return ref_;
 }
 
+const CencPssh* ContentProtection::GetPssh() const {
+  return cenc_pssh_;
+}
+
 } // namespace mpd
 } // namespace dash

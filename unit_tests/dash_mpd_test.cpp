@@ -2636,3 +2636,48 @@ TEST_CASE("dash_mpdparser_missing_xml", "[dash_mpd_parser]") {
 
     REQUIRE(mpdTree == nullptr);
 }
+
+/*
+ * Test Widevine PSSH parsing
+ *
+ */
+TEST_CASE("dash_mpdparser_cenc_pssh", "[dash_mpd_parser]") {
+    dash::mpd::DASHParser dash_parser;
+    std::unique_ptr<dash::mpd::MPD> mpdTree;
+
+    std::string xml =
+R"(<?xml version="1.0" encoding="UTF-8"?>)"
+R"(<MPD maxSegmentDuration="PT4S" mediaPresentationDuration="PT8M0.916666666S" minBufferTime="PT10S" profiles="urn:mpeg:dash:profile:isoff-live:2011,urn:com:dashif:dash264" type="static" xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:cenc="urn:mpeg:cenc:2013" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd">)"
+R"(    <BaseURL>https://vizio-vod-jw.cdn.vustreams.com/vizio/denfZo3e/denfZo3e_drm_65e9c0ea-dc18-40f6-a1c6-997274a24c0e.ism/</BaseURL>)"
+R"(    <Period duration="PT8M0.916666666S" id="1_PT0S" start="PT0S">)"
+R"(        <BaseURL>dash/</BaseURL>)"
+R"(        <AdaptationSet audioSamplingRate="44100" codecs="mp4a.40.2" contentType="audio" group="1" id="1" lang="en" mimeType="audio/mp4" segmentAlignment="true" startWithSAP="1">)"
+R"(            <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>)"
+R"(            <!-- Common Encryption -->)"
+R"(            <ContentProtection cenc:default_KID="E61AB607-49FA-E50F-21A1-80BD690301A8" schemeIdUri="urn:mpeg:dash:mp4protection:2011" value="cenc"/>)"
+R"(            <!-- Widevine -->)"
+R"(            <ContentProtection schemeIdUri="urn:uuid:EDEF8BA9-79D6-4ACE-A3C8-27DCD51D21ED">)"
+R"(                <cenc:pssh>AAAARHBzc2gBAAAA7e+LqXnWSs6jyCfc1R0h7QAAAAHmGrYHSfrlDyGhgL1pAwGoAAAAECIIZGVuZlpvM2VI49yVmwY=</cenc:pssh>)"
+R"(            </ContentProtection>)"
+R"(        </AdaptationSet>)"
+R"(    </Period>)"
+R"(</MPD>)";
+
+    mpdTree = dash_parser.Parse(xml.data(), xml.length(), "");
+
+    REQUIRE(mpdTree != nullptr);
+
+    auto periods = mpdTree->GetPeriods();
+    REQUIRE(periods.size() == 1);
+
+    auto period = periods[0];
+    auto adaptationSets = period->GetAdaptationSets();
+    REQUIRE(adaptationSets.size() == 1);
+
+    auto adaptationSet = adaptationSets[0];
+    auto contentProtections = adaptationSet->GetContentProtections();
+    REQUIRE(contentProtections.size() == 2);
+    auto contentProtection = contentProtections[1];
+    REQUIRE(contentProtection->GetPssh() != nullptr);
+    REQUIRE(contentProtection->GetPssh()->GetPssh() == "AAAARHBzc2gBAAAA7e+LqXnWSs6jyCfc1R0h7QAAAAHmGrYHSfrlDyGhgL1pAwGoAAAAECIIZGVuZlpvM2VI49yVmwY=");
+}
