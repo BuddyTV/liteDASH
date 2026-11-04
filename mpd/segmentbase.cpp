@@ -40,8 +40,16 @@ uint32_t SegmentBase::GetTimescale() const {
   return timescale_;
 }
 
+bool SegmentBase::HasTimescale() const {
+  return has_timescale_;
+}
+
 int SegmentBase::GetEptDelta() const {
   return ept_delta_;
+}
+
+bool SegmentBase::HasEptDelta() const {
+  return has_ept_delta_;
 }
 
 int SegmentBase::GetPdDelta() const {
@@ -50,6 +58,10 @@ int SegmentBase::GetPdDelta() const {
 
 uint64_t SegmentBase::GetPresentationTimeOffset() const {
   return presentation_time_offset_;
+}
+
+bool SegmentBase::HasPresentationTimeOffset() const {
+  return has_presentation_time_offset_;
 }
 
 uint64_t SegmentBase::GetPresentationDuration() const {
