@@ -25,12 +25,15 @@ bool SegmentBaseElementParser::ParseStart(const std::string &element_name,
   for (int i = 0; attrib[i]; i += 2) {
     IF_ATTRIB_MATCHES("timescale") {
       elem->timescale_ = strtoul(attrib[i + 1], NULL, 10);
+      elem->has_timescale_ = true;
     } else IF_ATTRIB_MATCHES("eptDelta") {
-      elem->ept_delta_ = (int) strtoul(attrib[i + 1], NULL, 10);
+      elem->ept_delta_ = (int) strtol(attrib[i + 1], NULL, 10);
+      elem->has_ept_delta_ = true;
     } else IF_ATTRIB_MATCHES("pdDelta") {
       elem->pd_delta_ = (int) strtoul(attrib[i + 1], NULL, 10);
     } else IF_ATTRIB_MATCHES("presentationTimeOffset") {
       elem->presentation_time_offset_ = strtoull(attrib[i + 1], NULL, 10);
+      elem->has_presentation_time_offset_ = true;
     } else IF_ATTRIB_MATCHES("presentationDuration") {
       elem->presentation_duration_ = strtoull(attrib[i + 1], NULL, 10);
     } else IF_ATTRIB_MATCHES("timeShiftBufferDepth") {

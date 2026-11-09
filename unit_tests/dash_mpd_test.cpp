@@ -532,6 +532,42 @@ TEST_CASE("dash_mpdparser_period_segmentBase", "[dash_mpd_parser]") {
     REQUIRE(segmentBase->GetPresentationTimeOffset() == 123456789);
     REQUIRE(segmentBase->GetIndexRange()  == "100-200"); 
     REQUIRE(segmentBase->HasIndexRangeExact() == true);
+    REQUIRE(segmentBase->HasTimescale());
+    REQUIRE(segmentBase->HasPresentationTimeOffset());
+    REQUIRE_FALSE(segmentBase->HasEptDelta());
+}
+
+/*
+ * Test that explicit SegmentBase default values are distinguishable from absent attributes
+ */
+TEST_CASE("dash_mpdparser_segmentBase_attribute_presence", "[dash_mpd_parser]") {
+    std::string xml =
+        "<?xml version=\"1.0\"?>"
+        "<MPD xmlns=\"urn:mpeg:dash:schema:mpd:2011\" profiles=\"urn:mpeg:dash:profile:isoff-main:2011\">"
+        "  <Period>"
+        "    <SegmentBase timescale=\"1\" presentationTimeOffset=\"0\" eptDelta=\"-3\"/>"
+        "    <AdaptationSet><SegmentBase/></AdaptationSet>"
+        "  </Period></MPD>";
+
+    auto mpdTree = dash::mpd::DASHParser().Parse(xml.data(), xml.length(), "");
+    REQUIRE(mpdTree != nullptr);
+
+    const auto* explicit_defaults = mpdTree->GetPeriods()[0]->GetSegmentBase();
+    REQUIRE(explicit_defaults != nullptr);
+    REQUIRE(explicit_defaults->HasTimescale());
+    REQUIRE(explicit_defaults->GetTimescale() == 1);
+    REQUIRE(explicit_defaults->HasPresentationTimeOffset());
+    REQUIRE(explicit_defaults->GetPresentationTimeOffset() == 0);
+    REQUIRE(explicit_defaults->HasEptDelta());
+    REQUIRE(explicit_defaults->GetEptDelta() == -3);
+
+    const auto* absent = mpdTree->GetPeriods()[0]->GetAdaptationSets()[0]->GetSegmentBase();
+    REQUIRE(absent != nullptr);
+    REQUIRE_FALSE(absent->HasTimescale());
+    REQUIRE_FALSE(absent->HasPresentationTimeOffset());
+    REQUIRE_FALSE(absent->HasEptDelta());
+    REQUIRE(absent->GetTimescale() == 1);
+    REQUIRE(absent->GetPresentationTimeOffset() == 0);
 }
 
 /*

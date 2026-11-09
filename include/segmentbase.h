@@ -26,9 +26,12 @@ class SegmentBase: public ElementBase {
     const URLType* GetRepresentationIndex() const;
     const FailoverContent* GetFailoverContent() const;
     uint32_t GetTimescale() const;
+    bool HasTimescale() const;
     int GetEptDelta() const;
+    bool HasEptDelta() const;
     int GetPdDelta() const;
     uint64_t GetPresentationTimeOffset() const;
+    bool HasPresentationTimeOffset() const;
     uint64_t GetPresentationDuration() const;
     const std::string& GetTimeShiftBufferDepth() const;
     const std::string& GetIndexRange() const;
@@ -50,6 +53,10 @@ class SegmentBase: public ElementBase {
     bool index_range_exact_;
     double availability_time_offset_;
     bool availability_time_complete_;
+    // Whether the attribute was present, so explicit default values can override inherited ones
+    bool has_timescale_ = false;
+    bool has_ept_delta_ = false;
+    bool has_presentation_time_offset_ = false;
 
     friend class SegmentBaseElementParser;
 };
