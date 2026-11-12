@@ -42,6 +42,7 @@ bool SegmentBaseElementParser::ParseStart(const std::string &element_name,
       elem->index_range_ = attrib[i + 1];
     } else IF_ATTRIB_MATCHES("indexRangeExact") {
       elem->index_range_exact_ = Utils::ConvertToBool(attrib[i + 1]);
+      elem->has_index_range_exact_ = true;
     } else IF_ATTRIB_MATCHES("availabilityTimeOffset") {
       elem->availability_time_offset_ = strtod(attrib[i + 1], NULL);
     } else IF_ATTRIB_MATCHES("availabilityTimeComplete") {
