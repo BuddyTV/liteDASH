@@ -545,7 +545,7 @@ TEST_CASE("dash_mpdparser_segmentBase_attribute_presence", "[dash_mpd_parser]") 
         "<?xml version=\"1.0\"?>"
         "<MPD xmlns=\"urn:mpeg:dash:schema:mpd:2011\" profiles=\"urn:mpeg:dash:profile:isoff-main:2011\">"
         "  <Period>"
-        "    <SegmentBase timescale=\"1\" presentationTimeOffset=\"0\" eptDelta=\"-3\"/>"
+        "    <SegmentBase timescale=\"1\" presentationTimeOffset=\"0\" eptDelta=\"-3\" indexRangeExact=\"false\"/>"
         "    <AdaptationSet><SegmentBase/></AdaptationSet>"
         "  </Period></MPD>";
 
@@ -560,12 +560,15 @@ TEST_CASE("dash_mpdparser_segmentBase_attribute_presence", "[dash_mpd_parser]") 
     REQUIRE(explicit_defaults->GetPresentationTimeOffset() == 0);
     REQUIRE(explicit_defaults->HasEptDelta());
     REQUIRE(explicit_defaults->GetEptDelta() == -3);
+    REQUIRE(explicit_defaults->HasIndexRangeExactAttribute());
+    REQUIRE_FALSE(explicit_defaults->HasIndexRangeExact());
 
     const auto* absent = mpdTree->GetPeriods()[0]->GetAdaptationSets()[0]->GetSegmentBase();
     REQUIRE(absent != nullptr);
     REQUIRE_FALSE(absent->HasTimescale());
     REQUIRE_FALSE(absent->HasPresentationTimeOffset());
     REQUIRE_FALSE(absent->HasEptDelta());
+    REQUIRE_FALSE(absent->HasIndexRangeExactAttribute());
     REQUIRE(absent->GetTimescale() == 1);
     REQUIRE(absent->GetPresentationTimeOffset() == 0);
 }

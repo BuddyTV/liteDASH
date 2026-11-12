@@ -36,6 +36,7 @@ class SegmentBase: public ElementBase {
     const std::string& GetTimeShiftBufferDepth() const;
     const std::string& GetIndexRange() const;
     bool HasIndexRangeExact() const;
+    bool HasIndexRangeExactAttribute() const;
     double GetAvailabilityTimeOffset() const;
     bool IsAvailabilityTimeComplete() const;
 
@@ -57,6 +58,7 @@ class SegmentBase: public ElementBase {
     bool has_timescale_ = false;
     bool has_ept_delta_ = false;
     bool has_presentation_time_offset_ = false;
+    bool has_index_range_exact_ = false;
 
     friend class SegmentBaseElementParser;
 };

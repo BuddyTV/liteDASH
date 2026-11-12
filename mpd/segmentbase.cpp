@@ -80,6 +80,10 @@ bool SegmentBase::HasIndexRangeExact() const {
   return index_range_exact_;
 }
 
+bool SegmentBase::HasIndexRangeExactAttribute() const {
+  return has_index_range_exact_;
+}
+
 double SegmentBase::GetAvailabilityTimeOffset() const {
   return availability_time_offset_;
 }
