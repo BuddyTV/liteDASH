@@ -54,10 +54,16 @@ bool AdaptationSetElementParser::ParseStart(const std::string &element_name,
       elem->min_bandwidth_ = strtoul(attrib[i + 1], NULL, 10);
     } else IF_ATTRIB_MATCHES("maxBandwidth") {
       elem->max_bandwidth_ = strtoul(attrib[i + 1], NULL, 10);
+    } else IF_ATTRIB_MATCHES("width") {
+      elem->min_width_ = strtoul(attrib[i + 1], NULL, 10);
+      elem->max_width_ = strtoul(attrib[i + 1], NULL, 10);
     } else IF_ATTRIB_MATCHES("minWidth") {
       elem->min_width_ = strtoul(attrib[i + 1], NULL, 10);
     } else IF_ATTRIB_MATCHES("maxWidth") {
       elem->max_width_ = strtoul(attrib[i + 1], NULL, 10);
+    } else IF_ATTRIB_MATCHES("height") {
+      elem->min_height_ = strtoul(attrib[i + 1], NULL, 10);
+      elem->max_height_ = strtoul(attrib[i + 1], NULL, 10);
     } else IF_ATTRIB_MATCHES("minHeight") {
       elem->min_height_ = strtoul(attrib[i + 1], NULL, 10);
     } else IF_ATTRIB_MATCHES("maxHeight") {
